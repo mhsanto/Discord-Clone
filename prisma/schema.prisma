@@ -6,7 +6,76 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
+
+model Profile {
+  id        String    @id @default(uuid())
+  userId    String
+  name      String
+  email     String
+  imageUrl  String    @db.Text
+  Server    Server[]
+  Member    Member[]
+  Channel   Channel[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Server {
+  id         String    @id @default(uuid())
+  profileId  String
+  profile    Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  name       String
+  imageUrl   String    @db.Text
+  inviteCode String    @db.Text
+  Member     Member[]
+  Channel    Channel[]
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@index([profileId])
+}
+
+enum MemberRole {
+  ADMIN
+  MODERATOR
+  MEMBER
+}
+
+model Member {
+  id        String     @id @default(uuid())
+  role      MemberRole @default(MEMBER)
+  profileId String
+  profile   Profile    @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  serverId  String
+  server    Server     @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@index([profileId])
+  @@index([serverId])
+}
+
+enum ChannelType {
+  TEXT
+  VOICE
+  AUDIO
+}
+
+model Channel {
+  id        String      @id @default(uuid())
+  type      ChannelType @default(TEXT)
+  serverId  String
+  server    Server      @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  profileId String
+  profile   Profile     @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  name      String
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  @@index([profileId])
+  @@index([serverId])
 }
