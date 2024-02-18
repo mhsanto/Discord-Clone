@@ -24,18 +24,18 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FileUpload } from "../file-upload";
-import { db } from "@/lib/db";
 import { useRouter } from "next/navigation";
+export const formSchema = z.object({
+  name: z.string().min(1, { message: "Please give your server a name." }),
+  imageUrl: z.string().min(1, { message: "Please enter a server image." }),
+});
+
 export const InitialModal = () => {
   const [mounted, setMounted] = useState(false);
   const router = useRouter();
   useEffect(() => {
     setMounted(true);
   }, []);
-  const formSchema = z.object({
-    name: z.string().min(1, { message: "Please give your server a name." }),
-    imageUrl: z.string().min(1, { message: "Please enter a server image." }),
-  });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -55,14 +55,14 @@ export const InitialModal = () => {
         },
         body: JSON.stringify(values),
       });
-      form.reset()
-      router.refresh()
-      window.location.reload()
+      form.reset();
+      router.refresh();
+      window.location.reload();
     } catch (error) {}
     console.log(values);
   }
   if (!mounted) {
-    return null
+    return null;
   }
   return (
     <Dialog open>
