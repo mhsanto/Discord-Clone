@@ -5,15 +5,9 @@ import { db } from "@/lib/db";
 import { MemberRole } from "@prisma/client";
 import { formSchema } from "@/components/modal/initial-modal";
 
-export async function POST(request: z.infer<typeof formSchema>) {
+export async function POST(request: Request) {
   try {
-    const validatedFields = formSchema.safeParse(request);
-
-    if (!validatedFields.success) {
-      return Response.json({ message: "Not Accepted Data" }, { status: 406 });
-    }
-
-    const { name, imageUrl } = validatedFields.data;
+    const { name, imageUrl } = await request.json();
     const profile = await currentProfile();
     if (!profile) {
       return Response.json({ message: "Unauthorized" }, { status: 500 });

@@ -1,5 +1,6 @@
 "use client";
 import * as z from "zod";
+import axios from "axios";
 import {
   Dialog,
   DialogContent,
@@ -48,13 +49,7 @@ export const InitialModal = () => {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      await fetch("/api/servers", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      });
+      await axios.post("/api/servers", values);
       form.reset();
       router.refresh();
       window.location.reload();
