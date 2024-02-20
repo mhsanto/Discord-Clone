@@ -21,7 +21,7 @@ export function NavigationServers({
     <TooltipAction label={name} align="center" side="right">
       <button
         type="button"
-        onClick={() => {}}
+        onClick={() => router.push(`/servers/${id}`)}
         className="relative group flex items-center w-full"
       >
         <div
