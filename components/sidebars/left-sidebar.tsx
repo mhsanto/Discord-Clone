@@ -22,10 +22,10 @@ export const LeftSidebar = async () => {
     },
   });
   return (
-    <div className="space-y-4 flex flex-col items-center h-full text-primary w-full dark:bg-[#1f1f22] py-3">
+    <div className="space-y-4 flex flex-col items-center h-full w-full text-primary  dark:bg-[#1f1f22] bg-[#E3E5E8] py-3">
       <Navigation />
       <Separator className="h-[2px] bg-zinc-300 dark:bg-zinc-700 rounded-md w-10 mx-auto" />
-      <ScrollArea>
+      <ScrollArea className="flex-1 w-full">
         {servers.map(({ id, name, imageUrl }) => (
           <div key={id} className="mb-4 ">
             <NavigationServers id={id} imageUrl={imageUrl} name={name} />
@@ -38,7 +38,7 @@ export const LeftSidebar = async () => {
         afterSignOutUrl="/"
         appearance={{
           elements:{
-            avatarBox:"h-[48px] w-[48px]"
+            avatarBox:"h-[40px] w-[40px]"
           }
         }} />
       </div>
